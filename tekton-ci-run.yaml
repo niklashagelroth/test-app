@@ -1,7 +1,31 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: clone-build-push
+  name: test-app-clone-build-push-run
 spec:
-  taskRef:
-    name: hello
+  pipelineRef:
+    name: clone-build-push
+  podTemplate:
+    securityContext:
+      fsGroup: 65532
+  workspaces:
+    - name: shared-data
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 100Mi
+    - name: git-credentials
+      secret:
+        secretName: private-repo
+    - name: docker-credentials
+      secret:
+        secretName: docker-credentials
+  params:
+    - name: repo-url
+      value: https://github.com/niklashagelroth/test-app.git
+    - name: image-reference
+      value: europe-north1-docker.pkg.dev/fleet-gift-232310/testing-stuff/test-app:latest
+# https://github.com/google/docsy-example.git
