@@ -19,7 +19,7 @@ spec:
               storage: 100Mi
     - name: git-credentials
       secret:
-        secretName: private-repo
+        secretName: private-nh-repo
     - name: docker-credentials
       secret:
         secretName: docker-credentials
